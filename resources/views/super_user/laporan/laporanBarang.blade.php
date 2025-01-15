@@ -2,39 +2,36 @@
 
 @section('content')
     <div class="p-6 bg-gray-100">
-        <h1 class="text-2xl font-bold text-gray-800 mb-4">Laporan Barang</h1>
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Laporan Barang</h1>
 
         <!-- Filter Section -->
         <div class="bg-white shadow-lg rounded-lg p-8 mb-8 max-w-6xl mx-auto">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Filter Laporan Barang</h2>
-            <form action="" method="GET" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Kategori -->
+            <form action="{{ route('superuser.laporanBarang') }}" method="GET"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- jns_brg -->
                 <div class="relative">
-                    <label for="kategori" class="block text-sm font-medium text-gray-600 mb-2">Kategori</label>
-                    <select id="kategori" name="kategori"
+                    <label for="jns_brg" class="block text-sm font-medium text-gray-600 mb-2">Jenis Barang</label>
+                    <select id="jns_brg" name="jns_brg"
                         class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
                         <option value="">Semua</option>
-                        <option value="Elektronik">Elektronik</option>
-                        <option value="Perabotan">Perabotan</option>
-                        <option value="Kantor">Kantor</option>
+                        @foreach ($jenisBarangs as $jenis)
+                            <option value="{{ $jenis->jns_brg_kode }}"
+                                {{ request('jns_brg') == $jenis->jns_brg_kode ? 'selected' : '' }}>
+                                {{ $jenis->jns_brg_nama }}
+                            </option>
+                        @endforeach
                     </select>
                 </div>
-                <!-- Kondisi -->
-                <div class="relative">
-                    <label for="kondisi" class="block text-sm font-medium text-gray-600 mb-2">Kondisi</label>
-                    <select id="kondisi" name="kondisi"
-                        class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
-                        <option value="">Semua</option>
-                        <option value="Baik">Baik</option>
-                        <option value="Rusak">Rusak</option>
-                    </select>
-                </div>
+
                 <!-- Periode -->
                 <div class="relative">
                     <label for="periode" class="block text-sm font-medium text-gray-600 mb-2">Periode</label>
                     <input type="month" id="periode" name="periode"
-                        class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
+                        class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400"
+                        value="{{ request('periode') }}">
                 </div>
+
                 <!-- Tombol Cari -->
                 <div class="flex justify-center sm:col-span-3 mt-6">
                     <button type="submit"
@@ -45,6 +42,12 @@
             </form>
         </div>
 
+        <!-- Pesan Jika Tidak Ada Data -->
+        @if (!empty($message))
+            <div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mb-6">
+                {{ $message }}
+            </div>
+        @endif
 
         <!-- Laporan Table -->
         <div class="bg-white shadow rounded-lg p-6">
@@ -55,31 +58,19 @@
                         <tr class="bg-gray-100 border-b">
                             <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">No</th>
                             <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Nama Barang</th>
-                            <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Kategori</th>
-                            <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Kondisi</th>
-                            <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Jumlah</th>
+                            <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Jenis Barang</th>
                             <th class="text-left px-4 py-3 text-sm font-semibold text-gray-700">Tanggal Masuk</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Example Static Data -->
-                        <tr class="border-b">
-                            <td class="px-4 py-3 text-sm text-gray-700">1</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Laptop HP</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Elektronik</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Baik</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">5</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">2024-01-01</td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="px-4 py-3 text-sm text-gray-700">2</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Meja Kantor</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Perabotan</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">Rusak</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">2</td>
-                            <td class="px-4 py-3 text-sm text-gray-700">2024-01-05</td>
-                        </tr>
-                        <!-- Add more rows as needed -->
+                        @foreach ($barangInventaris as $index => $barang)
+                            <tr class="border-b">
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $index + 1 }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $barang->br_nama }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $barang->jenis_barang->jns_brg_nama }}</td>
+                                <td class="px-4 py-3 text-sm text-gray-700">{{ $barang->br_tgl_terima }}</td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

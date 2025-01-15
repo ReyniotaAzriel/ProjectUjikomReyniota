@@ -7,12 +7,13 @@
         <!-- Filter Section -->
         <div class="bg-white shadow-lg rounded-lg p-8 mb-8 max-w-6xl mx-auto">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6">Filter Peminjaman</h2>
-            <form action="{{ route('laporan.peminjaman') }}" method="GET"
+            <form action="{{ route('superuser.laporanPeminjaman') }}" method="GET"
                 class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Nama Peminjam -->
                 <div class="relative">
-                    <label for="nama_peminjam" class="block text-sm font-medium text-gray-600 mb-2">Nama Peminjam</label>
-                    <input type="text" id="nama_peminjam" name="nama_peminjam" placeholder="Cari nama peminjam..."
+                    <label for="siswa" class="block text-sm font-medium text-gray-600 mb-2">Siswa</label>
+                    <input type="text" id="siswa" name="siswa" value="{{ request('siswa') }}"
+                        placeholder="Cari nama peminjam..."
                         class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
                 </div>
                 <!-- Tanggal Peminjaman -->
@@ -20,6 +21,7 @@
                     <label for="tanggal_peminjaman" class="block text-sm font-medium text-gray-600 mb-2">Tanggal
                         Peminjaman</label>
                     <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman"
+                        value="{{ request('tanggal_peminjaman') }}"
                         class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
                 </div>
                 <!-- Status Peminjaman -->
@@ -29,9 +31,12 @@
                     <select id="status_peminjaman" name="status_peminjaman"
                         class="block w-full border border-gray-300 rounded-lg shadow-sm text-gray-600 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300 ease-in-out transform hover:scale-105 hover:border-indigo-400">
                         <option value="">Semua</option>
-                        <option value="Dipinjam">Dipinjam</option>
-                        <option value="Dikembalikan">Dikembalikan</option>
-                        <option value="Terlambat">Terlambat</option>
+                        <option value="Dipinjam" {{ request('status_peminjaman') == 'Dipinjam' ? 'selected' : '' }}>Dipinjam
+                        </option>
+                        <option value="Dikembalikan" {{ request('status_peminjaman') == 'Dikembalikan' ? 'selected' : '' }}>
+                            Dikembalikan</option>
+                        <option value="Terlambat" {{ request('status_peminjaman') == 'Terlambat' ? 'selected' : '' }}>
+                            Terlambat</option>
                     </select>
                 </div>
                 <!-- Tombol Cari -->
@@ -52,7 +57,7 @@
                     <thead>
                         <tr class="bg-gray-100 border-b">
                             <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">No</th>
-                            <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Nama Peminjam</th>
+                            <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Siswa</th>
                             <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Nama Barang</th>
                             <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Tanggal Peminjaman</th>
                             <th class="text-left px-6 py-3 text-sm font-semibold text-gray-700">Tanggal Kembali</th>
@@ -60,15 +65,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Example row, repeat this for each item in the report -->
-                        <tr class="border-b">
-                            <td class="px-6 py-4 text-sm text-gray-600">1</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">Johan</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">Laptop</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">2025-01-05</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">2025-01-12</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">Dikembalikan</td>
-                        </tr>
+                        @foreach ($peminjamanData as $index => $peminjaman)
+                            @foreach ($peminjaman->peminjamanBarang as $barang)
+                                <tr class="border-b">
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $index + 1 }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $peminjaman->siswa->nama_siswa }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $barang->barangInventaris->br_nama }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $peminjaman->pb_tgl->format('Y-m-d') }}
+                                    </td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">
+                                        {{ $peminjaman->pb_harus_kembali_tgl->format('Y-m-d') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-600">{{ $peminjaman->pb_stat }}</td>
+                                </tr>
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>

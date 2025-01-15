@@ -84,13 +84,31 @@
                     </ul>
                 </li>
                 <li class="py-2 px-4 hover:bg-indigo-700 transition-all">
-                    <a href="/super-user/peminjaman-barang" class="flex items-center space-x-2">
+                    <button onclick="toggleSubmenu('submenu-peminjaman')"
+                        class="flex items-center space-x-2 w-full focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path
-                                d="M8 4a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V6a2 2 0 00-2-2H8zM6 6a2 2 0 114 0v10a2 2 0 11-4 0V6z" />
+                                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm4 2h4v2H8V5zM6 7v2h2V7H6zm6 0v2h2V7h-2zm2 4h-2v2h2v-2zm-6 0H6v2h2v-2z" />
                         </svg>
                         <span>Peminjaman Barang</span>
-                    </a>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-auto" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                    <ul id="submenu-peminjaman" class="ml-6 mt-2">
+                        <li class="py-2 px-4 hover:bg-indigo-800 transition-all">
+                            <a href="/super-user/peminjaman-barang">Daftar Peminjaman</a>
+                        </li>
+                        <li class="py-2 px-4 hover:bg-indigo-800 transition-all">
+                            <a href="/super-user/pengembalian-barang">Pengembalian Barang</a>
+                        </li>
+                        {{-- <li class="py-2 px-4 hover:bg-indigo-800 transition-all">
+                            <a href="/super-user/laporan-peminjaman">Barang Belum Kembali</a>
+                        </li> --}}
+                    </ul>
                 </li>
                 <li class="py-2 px-4 hover:bg-indigo-700 transition-all">
                     <button onclick="toggleSubmenu('submenu-laporan')"

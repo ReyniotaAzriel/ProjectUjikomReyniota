@@ -18,24 +18,38 @@
                 <table class="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
                     <thead class="bg-indigo-600 text-white">
                         <tr>
-                            <th class="px-4 py-2 text-left">Nama Barang</th>
-                            <th class="px-4 py-2 text-left">Peminjam</th>
                             <th class="px-4 py-2 text-left">Tanggal Peminjaman</th>
+                            <th class="px-4 py-2 text-left">No Siswa</th>
+                            <th class="px-4 py-2 text-left">Nama Siswa</th>
+                            <th class="px-4 py-2 text-left">Nama Barang</th> 
+                            <th class="px-4 py-2 text-left">Harus Kembali Tanggal</th>
                             <th class="px-4 py-2 text-left">Status</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Contoh Data -->
-                        <tr class="border-b">
-                            <td class="px-4 py-2">Meja Kantor</td>
-                            <td class="px-4 py-2">eka dan januar</td>
-                            <td class="px-4 py-2">25-01-2025</td>
-                            <td class="px-4 py-2">Belum Kembali </td>
-                        </tr>
-                        <!-- Tambahkan Data Lain -->
+                        @foreach ($peminjaman as $pinjam)
+                            @foreach ($pinjam->peminjamanBarang as $barangPinjam)
+                                <tr class="border-b">
+                                    <td class="px-4 py-2">{{ $pinjam->pb_tgl->format('d-m-Y') }}</td>
+                                    <td class="px-4 py-2">{{ $pinjam->siswa->no_siswa }}</td>
+                                    <td class="px-4 py-2">{{ $pinjam->siswa->nama_siswa }}</td>
+                                    <td class="px-4 py-2">{{ $barangPinjam->barangInventaris->br_nama }}</td>
+                                    <!-- Menampilkan Nama Barang -->
+                                    <td class="px-4 py-2">{{ $pinjam->pb_harus_kembali_tgl->format('d-m-Y') }}</td>
+                                    <td class="px-4 py-2">
+                                        @if ($pinjam->pb_stat == '01')
+                                            Peminjaman Aktif
+                                        @else
+                                            Peminjaman Selesai
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
+
 
             <!-- Tombol untuk Membuka Modal -->
             <button id="openModalBtn"
@@ -50,44 +64,35 @@
                         ✕
                     </button>
                     <h2 class="text-2xl font-bold text-gray-800 mb-6">Form Peminjaman Barang</h2>
-                    <form action="/peminjaman/create" method="POST" class="space-y-6">
+                    <form action="{{ route('superuser.simpanPeminjamanBarang') }}" method="POST">
                         @csrf
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="barang" class="block text-gray-700 font-medium">Pilih Barang</label>
-                                <select id="barang" name="barang"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
-                                    <option value="meja">Meja Kantor</option>
-                                    <option value="kursi">Kursi Kantor</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label for="jumlah" class="block text-gray-700 font-medium">Jumlah</label>
-                                <input type="number" id="jumlah" name="jumlah"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    required>
-                            </div>
+                        <div class="mb-4">
+                            <label for="siswa_id" class="block text-sm font-semibold text-gray-700">Nama Siswa</label>
+                            <select name="siswa_id" id="siswa_id" class="w-full p-2 border rounded">
+                                @foreach ($siswa as $item)
+                                    <option value="{{ $item->siswa_id }}">{{ $item->nama_siswa }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="peminjam" class="block text-gray-700 font-medium">Nama Peminjam</label>
-                                <input type="text" id="peminjam" name="peminjam"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    required>
-                            </div>
-                            <div>
-                                <label for="tanggal_peminjaman" class="block text-gray-700 font-medium">Tanggal
-                                    Peminjaman</label>
-                                <input type="date" id="tanggal_peminjaman" name="tanggal_peminjaman"
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                    required>
-                            </div>
+                        <div class="mb-4">
+                            <label for="br_kode" class="block text-sm font-semibold text-gray-700">Barang</label>
+                            <select name="br_kode" id="br_kode" class="w-full p-2 border rounded">
+                                @foreach ($barang as $item)
+                                    <option value="{{ $item->br_kode }}">{{ $item->br_nama }}</option>
+                                @endforeach
+                            </select>
                         </div>
 
-                        <button type="submit"
-                            class="w-full mt-6 bg-indigo-600 text-white px-6 py-3 rounded-lg shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Pinjam</button>
+                        <div class="mb-4">
+                            <label for="pb_tgl" class="block text-sm font-semibold text-gray-700">Tanggal
+                                Peminjaman</label>
+                            <input type="date" name="pb_tgl" id="pb_tgl" class="w-full p-2 border rounded" required>
+                        </div>
+
+                        <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg">Pinjam Barang</button>
                     </form>
+
                 </div>
             </div>
         </div>

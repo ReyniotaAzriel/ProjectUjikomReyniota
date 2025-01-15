@@ -10,4 +10,5 @@ use App\Models\User;
 class AuthController extends Controller
 {
    
+    
 }

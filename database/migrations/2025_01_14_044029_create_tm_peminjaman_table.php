@@ -15,14 +15,16 @@ return new class extends Migration
             $table->string('pb_id', 20)->primary();
             $table->string('user_id', 20)->nullable();
             $table->dateTime('pb_tgl')->nullable();
-            $table->string('pb_no_siswa', 20)->nullable();
-            $table->string('pb_nama_siswa', 100)->nullable();
+            $table->string('siswa_id', 10)->nullable(); // Disesuaikan menjadi string(10)
             $table->dateTime('pb_harus_kembali_tgl')->nullable();
             $table->char('pb_stat', 2)->nullable();
             $table->timestamps();
-
+        
             $table->foreign('user_id')->references('user_id')->on('tm_user');
+            $table->foreign('siswa_id')->references('siswa_id')->on('siswa')->onDelete('set null');
         });
+        
+        
     }
 
     /**
