@@ -14,12 +14,20 @@ class PeminjamanBarangController extends Controller
 {
     public function peminjamanBarang()
     {
-        $peminjaman = Peminjaman::with(['siswa', 'peminjamanBarang.barangInventaris'])->get();
-        $barang = BarangInventaris::where('br_status', '1')->get(); 
-        $siswa = Siswa::all(); 
+        // Ambil hanya peminjaman dengan status '1'
+        $peminjaman = Peminjaman::with(['siswa', 'peminjamanBarang.barangInventaris'])
+        ->where('pb_stat', '1')
+            ->get();
+
+        // Ambil hanya barang yang tersedia
+        $barang = BarangInventaris::where('br_status', '1')->get();
+
+        // Ambil semua data siswa
+        $siswa = Siswa::all();
 
         return view('super_user.peminjaman_barang.peminjaman', compact('barang', 'siswa', 'peminjaman'));
     }
+
 
     public function simpanPeminjamanBarang(Request $request)
     {
@@ -32,17 +40,17 @@ class PeminjamanBarangController extends Controller
         try {
             $tanggalPeminjaman = Carbon::createFromFormat('Y-m-d', $request->pb_tgl);
 
-            $tanggalKembali = $tanggalPeminjaman->addWeek(); 
+            $tanggalKembali = $tanggalPeminjaman->addWeek();
 
             DB::beginTransaction();
 
             // Menyimpan data peminjaman utama
             $peminjaman = new Peminjaman();
-            $peminjaman->pb_id = 'PB' . strtoupper(uniqid()); 
+            $peminjaman->pb_id = 'PB' . strtoupper(uniqid());
             $peminjaman->siswa_id = $request->siswa_id;
             $peminjaman->pb_tgl = $tanggalPeminjaman;
-            $peminjaman->pb_harus_kembali_tgl = $tanggalKembali; 
-            $peminjaman->pb_stat = '01';
+            $peminjaman->pb_harus_kembali_tgl = $tanggalKembali;
+            $peminjaman->pb_stat = '1';
             $peminjaman->save();
 
             // Menyimpan data peminjaman barang terkait
@@ -50,13 +58,13 @@ class PeminjamanBarangController extends Controller
             $peminjamanBarang->pbd_id = 'PBD' . strtoupper(uniqid());
             $peminjamanBarang->pb_id = $peminjaman->pb_id;
             $peminjamanBarang->br_kode = $request->br_kode;
-            $peminjamanBarang->pdb_tgl = $tanggalPeminjaman; 
-            $peminjamanBarang->pdb_sts = '01'; 
+            $peminjamanBarang->pdb_tgl = $tanggalPeminjaman;
+            $peminjamanBarang->pdb_sts = '1';
             $peminjamanBarang->save();
 
             // Mengubah status barang menjadi tidak tersedia
             $barang = BarangInventaris::findOrFail($request->br_kode);
-            $barang->br_status = '00'; 
+            $barang->br_status = '0';
             $barang->save();
 
             // Commit transaksi jika tidak ada error

@@ -73,7 +73,7 @@ class BarangInventarisController extends Controller
                 'br_nama' => $request->nama,
                 'br_tgl_terima' => now(),
                 'br_tgl_entry' => now(),
-                'br_status' => 1,
+                'br_status' => $request->br_status,
             ]);
 
             return redirect()->route('superuser.daftarBarang')->with('success', 'Barang berhasil ditambahkan.');
