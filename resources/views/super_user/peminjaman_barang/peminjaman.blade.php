@@ -4,12 +4,18 @@
     <main class="flex-1 p-6 bg-gradient-to-r from-blue-100 to-indigo-200">
         <div class="container mx-auto py-8">
             <!-- Tab Navigation -->
-            <div class="mb-6">
+            <div class="mb-6 flex justify-between items-center">
                 <ul class="flex space-x-6 text-lg font-semibold text-indigo-700">
                     <li>
                         <a href="#daftarPeminjaman" class="hover:text-indigo-900 transition duration-300">Daftar Peminjaman</a>
                     </li>
                 </ul>
+
+                <!-- Tombol untuk Membuka Modal -->
+                <button id="openModalBtn"
+                    class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-gradient-to-l transition duration-300 ease-in-out">
+                    Form Peminjaman
+                </button>
             </div>
 
             <!-- Daftar Peminjaman -->
@@ -48,12 +54,6 @@
                     </tbody>
                 </table>
             </div>
-
-            <!-- Tombol untuk Membuka Modal -->
-            <button id="openModalBtn"
-                class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg shadow-lg hover:bg-gradient-to-l transition duration-300 ease-in-out">
-                Form Peminjaman
-            </button>
 
             <!-- Modal Form Peminjaman -->
             <div id="modalForm" class="fixed inset-0 bg-gray-800 bg-opacity-50 flex items-center justify-center hidden">

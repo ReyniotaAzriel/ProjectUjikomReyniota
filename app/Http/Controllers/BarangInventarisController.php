@@ -81,4 +81,53 @@ class BarangInventarisController extends Controller
             return back()->withErrors(['error' => 'Gagal menambahkan barang. Silakan coba lagi.'])->withInput();
         }
     }
+
+    public function editBarang($br_kode)
+    {
+        // Cari barang berdasarkan kode
+        $barang = BarangInventaris::where('br_kode', $br_kode)->firstOrFail();
+        $jenisBarang = JenisBarang::all();
+
+        return view('super_user.barang_inventaris.edit', compact('barang', 'jenisBarang'));
+    }
+
+    public function updateBarang(Request $request, $br_kode)
+    {
+        // Validasi input
+        $request->validate([
+            'nama' => 'required|string|max:255',
+            'kategori' => 'required|exists:tr_jenis_barang,jns_brg_kode',
+            'br_status' => 'required|integer|in:1,2,3',
+        ]);
+
+        try {
+            // Cari barang berdasarkan kode
+            $barang = BarangInventaris::where('br_kode', $br_kode)->firstOrFail();
+
+            // Update data barang
+            $barang->update([
+                'br_nama' => $request->nama,
+                'jns_brg_kode' => $request->kategori,
+                'br_status' => $request->br_status,
+            ]);
+
+            return redirect()->route('superuser.daftarBarang')->with('success', 'Barang berhasil diperbarui.');
+        } catch (\Exception $e) {
+            return back()->withErrors(['error' => 'Gagal memperbarui barang. Silakan coba lagi.'])->withInput();
+        }
+    }
+
+
+    public function hapusBarang($br_kode)
+    {
+        BarangInventaris::findOrFail($br_kode)->delete();
+        return redirect()->route('superuser.daftarBarang')->with('success', 'Barang berhasil Dihapus.');
+
+    }
+
+
+
+
+
+
 }

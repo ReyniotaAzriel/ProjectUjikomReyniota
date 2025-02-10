@@ -31,6 +31,7 @@ class PeminjamanBarangController extends Controller
 
     public function simpanPeminjamanBarang(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'siswa_id' => 'required|exists:siswa,siswa_id',
             'br_kode' => 'required|exists:tm_barang_inventaris,br_kode',
@@ -48,7 +49,7 @@ class PeminjamanBarangController extends Controller
             $peminjaman = new Peminjaman();
             $peminjaman->pb_id = 'PB' . strtoupper(uniqid());
             $peminjaman->siswa_id = $request->siswa_id;
-            $peminjaman->pb_tgl = $tanggalPeminjaman;
+            $peminjaman->pb_tgl = $request->pb_tgl;
             $peminjaman->pb_harus_kembali_tgl = $tanggalKembali;
             $peminjaman->pb_stat = '1';
             $peminjaman->save();

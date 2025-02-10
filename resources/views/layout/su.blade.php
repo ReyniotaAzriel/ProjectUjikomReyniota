@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>System Inventory</title>
     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}" sizes="180x180">
     <!-- Add Tailwind CSS -->
@@ -203,7 +204,10 @@
                             <a href="/super-user/jenis-barang" class="text-white hover:text-white">Jenis Barang</a>
                         </li>
                         <li class="py-2 px-4 hover:bg-gradient-to-r hover:from-indigo-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
-                            <a href="/super-user/daftar-pengguna" class="text-white hover:text-white">Daftar Pengguna</a>
+                            <a href="{{ route('superuser.daftarPengguna.index') }}" class="text-white hover:text-white">Daftar Pengguna</a>
+                        </li>
+                        <li class="py-2 px-4 hover:bg-gradient-to-r hover:from-indigo-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
+                            <a href="{{ route('superuser.siswa.index') }}" class="text-white hover:text-white">Daftar Siswa</a>
                         </li>
                     </ul>
                 </li>
